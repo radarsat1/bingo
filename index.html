@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body { font-family: sans; text-align: center; background: #DDD; }
+      table { margin-left: auto; margin-right: auto; }
+      td { border: solid 1px grey; width: 100px; height: 100px; text-align: center;
+           padding-left: 10px; padding-right: 10px; }
+    </style>
+  </head>
+  <body>
+    <h1>TIPC Bingo</h1>
+    <table id="bingo">
+      <tr>
+        <td id="square00"></td>
+        <td id="square01"></td>
+        <td id="square02"></td>
+        <td id="square03"></td>
+        <td id="square04"></td>
+      </tr>
+      <tr>
+        <td id="square10"></td>
+        <td id="square11"></td>
+        <td id="square12"></td>
+        <td id="square13"></td>
+        <td id="square14"></td>
+      </tr>
+      <tr>
+        <td id="square20"></td>
+        <td id="square21"></td>
+        <td id="square22"></td>
+        <td id="square23"></td>
+        <td id="square24"></td>
+      </tr>
+      <tr>
+        <td id="square30"></td>
+        <td id="square31"></td>
+        <td id="square32"></td>
+        <td id="square33"></td>
+        <td id="square34"></td>
+      </tr>
+      <tr>
+        <td id="square40"></td>
+        <td id="square41"></td>
+        <td id="square42"></td>
+        <td id="square43"></td>
+        <td id="square44"></td>
+      </tr>
+    </table>
+    <br/>
+    <input type='button' onclick='reset(true);' value="Clear!"></input>
+  </body>
+  <script>
+  var state = [];
+  function reset(resetting)
+  {
+    try {
+      if (!resetting)
+        state = JSON.parse(localStorage.getItem("bingo"));
+      if (state.length != 25) {
+        state = [];
+        resetting = true;
+      }
+    } catch {
+      state = [];
+      resetting = true;
+    }
+    if ((state === null) || resetting) {
+      state = [];
+      resetting = true;
+    }
+    var text=[
+      'Can you hear me?',
+      'Depends on the context',
+      'Nice to meet you',
+      '(post) Covid-19',
+      'Where is the niche?',
+      'Which group am I in?',
+      'Degrowth, Pluriverse (or anything related)',
+      'I have a comment and a question',
+      'Can you see my screen?',
+      'I can’t find the agenda',
+      'I need to find my charger',
+      'I have to take this call',
+      'BINGO!',
+      'Try turning off your camera',
+      'BONUS POINT: Kid or pet in the call',
+      'Really interesting question',
+      'Can’t hear you',
+      'Sorry, I was on mute',
+      'Regimes are unstable',
+      'It is highly political',
+      'Great presentation',
+      'It is an interesting case',
+      'Developing country/context',
+      'I feel tired',
+      'Can you wrap up?',
+    ];
+    for (var i=0; i<5; i++) {
+      for (var j=0; j<5; j++) {
+        var sq = document.getElementById('square'+i+j);
+        var n = i*5+j;
+        sq.innerText = text[n];
+        if (resetting) {
+          sq.style.backgroundColor='#FFF';
+          state.push(0);
+        } else {
+          if (state[i*5+j]==1)
+            sq.style.backgroundColor='#69F';
+          else {
+            sq.style.backgroundColor='#FFF';
+          }
+        }
+        sq.onclick = function(sq,n) { return function(e) {
+          if (state[n]===1) {
+            sq.style.backgroundColor='#FFF';
+            state[n] = 0;
+          } else {
+            sq.style.backgroundColor='#69F';
+            state[n] = 1;
+          }
+          localStorage.setItem('bingo', JSON.stringify(state));
+        } }(sq,n);
+      }
+    }
+  }
+  reset(false);
+  </script>
+</html>
